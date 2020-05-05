@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateRequestsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('requests', function (Blueprint $table) {
+      $table->id();
+			$table->bigInteger('item')->unsigned();
+			$table->foreign('item')->references('id')->on('items');
+			$table->string('reason', 256)->nullable();
+			$table->unsignedBigInteger('requestedBy')->unsigned();
+			$table->foreign('requestedBy')->references('id')->on('users');
+			$table->enum('requestStatus',['approved','refused','pending'])->default('pending');
+			$table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('requests');
+    }
+}
